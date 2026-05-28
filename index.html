@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Курс лекций | Веб-разработка на HTML, CSS и JavaScript</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Roboto', 'Inter', system-ui, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                #0a0f1a 0%, 
+                #0f1623 15%, 
+                #1a1f35 30%, 
+                #0d1b2a 45%, 
+                #1b263b 60%, 
+                #0f1623 80%, 
+                #0a0f1a 100%);
+            background-size: 300% 300%;
+            animation: gradientShift 12s ease infinite;
+            z-index: -2;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 40%, rgba(52,152,219,0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 60%, rgba(155,89,182,0.12) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 80%, rgba(46,204,113,0.08) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+            animation: subtlePulse 8s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            25% { background-position: 50% 100%; }
+            50% { background-position: 100% 50%; }
+            75% { background-position: 50% 0%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes subtlePulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(32,178,170,0.4);
+            border-radius: 50%;
+            animation: floatParticle linear infinite;
+        }
+
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-20vh) translateX(50px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(32,178,170,0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(32,178,170,0.5);
+            border-radius: 50px;
+            padding: 8px 25px;
+            font-size: 14px;
+            color: #20b2aa;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            animation: pulse 2s ease infinite;
+            box-shadow: 0 0 15px rgba(32,178,170,0.3);
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 15px rgba(32,178,170,0.3);
+                border-color: rgba(32,178,170,0.5);
+            }
+            50% {
+                box-shadow: 0 0 25px rgba(32,178,170,0.6);
+                border-color: rgba(32,178,170,0.8);
+            }
+        }
+
+        .header h1 {
+            font-size: 3.5em;
+            background: linear-gradient(135deg, #ffffff, #20b2aa, #9b59b6, #2ecc71);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 20px;
+            animation: textGradient 5s ease infinite;
+            letter-spacing: -0.5px;
+        }
+
+        @keyframes textGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .header p {
+            color: rgba(255,255,255,0.75);
+            font-size: 1.2em;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .tabs-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: rgba(25, 30, 45, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 12px 35px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-2px);
+            background: rgba(32,178,170,0.2);
+            border-color: rgba(32,178,170,0.4);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #20b2aa, #3498db);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 5px 20px rgba(32,178,170,0.3);
+        }
+
+        .test-btn {
+            background: linear-gradient(135deg, #9b59b6, #e74c3c);
+        }
+
+        .test-btn:hover {
+            background: linear-gradient(135deg, #8e44ad, #c0392b);
+            box-shadow: 0 5px 20px rgba(155,89,182,0.3);
+        }
+
+        .lectures-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .lecture-card {
+            background: rgba(25, 30, 45, 0.6);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            padding: 28px;
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lecture-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.6s ease;
+            pointer-events: none;
+        }
+
+        .lecture-card:hover::before {
+            left: 100%;
+        }
+
+        .lecture-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            background: rgba(35, 40, 65, 0.8);
+            border-color: rgba(32,178,170,0.5);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px rgba(32,178,170,0.2);
+        }
+
+        .lecture-card:active {
+            transform: translateY(-2px) scale(0.98);
+            transition: transform 0.1s ease;
+        }
+
+        .card-number {
+            font-size: 12px;
+            color: #20b2aa;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .lecture-card:hover .card-number {
+            letter-spacing: 3px;
+            color: #48c9b0;
+        }
+
+        .lecture-card h2 {
+            font-size: 1.6em;
+            margin-bottom: 15px;
+            line-height: 1.3;
+            transition: transform 0.3s;
+        }
+
+        .lecture-card:hover h2 {
+            transform: translateX(5px);
+        }
+
+        .lecture-card p {
+            color: rgba(255,255,255,0.65);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 18px;
+        }
+
+        .card-topics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .topic-tag {
+            background: rgba(32,178,170,0.15);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            color: #20b2aa;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .lecture-card:hover .topic-tag {
+            background: rgba(32,178,170,0.25);
+            border-color: rgba(32,178,170,0.3);
+            transform: scale(1.05);
+        }
+
+        .arrow-icon {
+            margin-top: 18px;
+            font-size: 22px;
+            color: #20b2aa;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .lecture-card:hover .arrow-icon {
+            opacity: 1;
+            transform: translateX(5px);
+        }
+
+        .info-section {
+            background: rgba(15, 20, 35, 0.5);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            padding: 35px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .info-section:hover {
+            transform: scale(1.01);
+            background: rgba(15, 20, 35, 0.6);
+            border-color: rgba(32,178,170,0.2);
+        }
+
+        .info-section h3 {
+            color: white;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .info-section p {
+            color: rgba(255,255,255,0.6);
+            line-height: 1.7;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            color: rgba(255,255,255,0.4);
+            font-size: 13px;
+            animation: fadeInUp 1s ease-out 0.5s both;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 20px 15px; }
+            .header h1 { font-size: 2.2em; }
+            .lectures-grid { grid-template-columns: 1fr; gap: 20px; }
+            .lecture-card { padding: 22px; }
+            .lecture-card h2 { font-size: 1.4em; }
+            .tab-btn { padding: 8px 20px; font-size: 14px; }
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 20, 35, 0.8);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #20b2aa;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #48c9b0;
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+
+    <div class="container">
+        <div class="header">
+            <div class="badge">📚 Учебный курс</div>
+            <h1>🌐 Веб-разработка:<br>HTML, CSS, JavaScript</h1>
+        </div>
+
+        <div class="tabs-container">
+            <button class="tab-btn active" data-tab="lectures">📖 Лекции</button>
+            <button class="tab-btn" data-tab="practicals">💻 Лабораторные работы</button>
+            <button class="tab-btn test-btn" onclick="window.location.href='test.html'">📝 Пройти тест</button>
+        </div>
+
+        <!-- Раздел Лекции -->
+        <div id="lectures" class="section active">
+            <div class="lectures-grid">
+                <a href="lecture1.html" class="lecture-card">
+                    <div class="card-number">Лекция №1</div>
+                    <h2>📄 Основы веб-разработки и структура HTML-документа</h2>
+                    <p>Что такое HTML, CSS и JavaScript. Структура документа. Основные теги: заголовки, параграфы, списки, ссылки, изображения.</p>
+                    <div class="card-topics"><span class="topic-tag">HTML</span><span class="topic-tag">Теги</span><span class="topic-tag">Структура</span></div>
+                    <div class="arrow-icon">→</div>
+                </a>
+                <a href="lecture2.html" class="lecture-card">
+                    <div class="card-number">Лекция №2</div>
+                    <h2>🏗️ Семантическая верстка и работа с контентом</h2>
+                    <p>Семантические теги, форматирование текста, абсолютные и относительные пути, вставка изображений, таблицы.</p>
+                    <div class="card-topics"><span class="topic-tag">Семантика</span><span class="topic-tag">Пути</span><span class="topic-tag">Таблицы</span></div>
+                    <div class="arrow-icon">→</div>
+                </a>
+                <a href="lecture3.html" class="lecture-card">
+                    <div class="card-number">Лекция №3</div>
+                    <h2>🎨 Основы CSS: стилизация и оформление</h2>
+                    <p>Способы подключения CSS, селекторы, каскадность и наследование, работа с цветом, стилизация текста.</p>
+                    <div class="card-topics"><span class="topic-tag">CSS</span><span class="topic-tag">Селекторы</span><span class="topic-tag">Типографика</span></div>
+                    <div class="arrow-icon">→</div>
+                </a>
+                <a href="lecture4.html" class="lecture-card">
+                    <div class="card-number">Лекция №4</div>
+                    <h2>⚡ Основы JavaScript: переменные, типы данных и синтаксис</h2>
+                    <p>Подключение скриптов, переменные var/let/const, типы данных, операторы, взаимодействие с пользователем.</p>
+                    <div class="card-topics"><span class="topic-tag">JavaScript</span><span class="topic-tag">Переменные</span><span class="topic-tag">Типы данных</span></div>
+                    <div class="arrow-icon">→</div>
+                </a>
+                <a href="lecture5.html" class="lecture-card">
+                    <div class="card-number">Лекция №5</div>
+                    <h2>🔄 Управляющие конструкции и функции в JavaScript</h2>
+                    <p>Условные операторы, циклы, массивы, функции, объекты. Основы работы с коллекциями и структурами данных.</p>
+                    <div class="card-topics"><span class="topic-tag">if/else</span><span class="topic-tag">Циклы</span><span class="topic-tag">Массивы</span><span class="topic-tag">Функции</span></div>
+                    <div class="arrow-icon">→</div>
+                </a>
+                <a href="lecture6.html" class="lecture-card">
+                    <div class="card-number">Лекция №6</div>
+                    <h2>📡 Работа с DOM и событиями. Публикация сайта</h2>
+                    <p>DOM-дерево, поиск элементов, изменение стилей, события, создание интерактивных элементов, хостинг.</p>
+                    <div class="card-topics"><span class="topic-tag">DOM</span><span class="topic-tag">События</span><span class="topic-tag">GitHub Pages</span></div>
+                    <div class="arrow-icon">→</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Раздел Практические лабораторные работы -->
+        <div id="practicals" class="section">
+            <div class="lectures-grid">
+                <a href="lab1.html" class="lecture-card">
+                    <div class="card-number">Лабораторная работа №1</div>
+                    <h2>📝 Основы HTML. Структура и базовые теги</h2>
+                    <p>Создание простой веб-страницы с использованием основных тегов HTML: заголовки, абзацы, списки, ссылки и изображения.</p>
+                    <div class="card-topics"><span class="topic-tag">HTML</span><span class="topic-tag">Теги</span><span class="topic-tag">Структура</span></div>
+                    <div class="arrow-icon">→</div>
+                </a>
+                <a href="lab2.html" class="lecture-card">
+                    <div class="card-number">Лабораторная работа №2</div>
+                    <h2>🏗️ Семантическая вёрстка и работа с контентом</h2>
+                    <p>Семантические теги, форматирование текста, абсолютные и относительные пути, вставка изображений, таблицы.</p>
+                    <div class="card-topics"><span class="topic-tag">Семантика</span><span class="topic-tag">Пути</span><span class="topic-tag">Таблицы</span></div>
+                    <div class="arrow-icon">→</div>
+                </a>
+                <a href="lab3.html" class="lecture-card">
+                    <div class="card-number">Лабораторная работа №3</div>
+                    <h2>🎨 Основы CSS. Подключение и селекторы</h2>
+                    <p>Способы подключения CSS, селекторы, каскадность и наследование, специфичность.</p>
+                    <div class="card-topics"><span class="topic-tag">CSS</span><span class="topic-tag">Селекторы</span><span class="topic-tag">Специфичность</span></div>
+                    <div class="arrow-icon">→</div>
+                </a>
+                <a href="lab4.html" class="lecture-card">
+                    <div class="card-number">Лабораторная работа №4</div>
+                    <h2>🎨 CSS: цвет, фон, стилизация текста и макет</h2>
+                    <p>Работа с цветом, фоном, типографика, блочная модель, отступы, рамки.</p>
+                    <div class="card-topics"><span class="topic-tag">CSS</span><span class="topic-tag">Цвет</span><span class="topic-tag">Типографика</span><span class="topic-tag">Макет</span></div>
+                    <div class="arrow-icon">→</div>
+                </a>
+                <a href="lab5.html" class="lecture-card">
+                    <div class="card-number">Лабораторная работа №5</div>
+                    <h2>⚡ Основы JavaScript. Переменные, типы, операторы, диалоги</h2>
+                    <p>Переменные let/const, типы данных, операторы, alert, prompt, confirm, консоль.</p>
+                    <div class="card-topics"><span class="topic-tag">JavaScript</span><span class="topic-tag">Переменные</span><span class="topic-tag">Диалоги</span></div>
+                    <div class="arrow-icon">→</div>
+                </a>
+                <a href="lab6.html" class="lecture-card">
+                    <div class="card-number">Лабораторная работа №6</div>
+                    <h2>🔄 Управляющие конструкции, функции и массивы</h2>
+                    <p>Условные операторы, циклы, массивы (push, pop, shift, unshift), функции, объекты.</p>
+                    <div class="card-topics"><span class="topic-tag">if/else</span><span class="topic-tag">Циклы</span><span class="topic-tag">Массивы</span><span class="topic-tag">Функции</span></div>
+                    <div class="arrow-icon">→</div>
+                </a>
+                <a href="lab7.html" class="lecture-card">
+                    <div class="card-number">Лабораторная работа №7</div>
+                    <h2>📡 DOM и события. Интерактивные элементы</h2>
+                    <p>Поиск элементов, изменение стилей, addEventListener, модальное окно, бургер-меню, слайдер.</p>
+                    <div class="card-topics"><span class="topic-tag">DOM</span><span class="topic-tag">События</span><span class="topic-tag">Модальное окно</span><span class="topic-tag">Слайдер</span></div>
+                    <div class="arrow-icon">→</div>
+                </a>
+                <a href="lab8.html" class="lecture-card">
+                    <div class="card-number">Лабораторная работа №8</div>
+                    <h2>🚀Разработка интернет-магазина «SportBags</h2>
+                    <p>Создание полноценного сайта с меню, модальным окном, слайдером, аккордеоном, тёмной темой</p>
+                    <div class="card-topics"><span class="topic-tag">Проект</span><span class="topic-tag">Адаптивность</span><span class="topic-tag">Публикация</span><span class="topic-tag">GitHub Pages</span></div>
+                    <div class="arrow-icon">→</div>
+                </a>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3>📖 О курсе</h3>
+            <p>Данный курс охватывает фундаментальные основы веб-разработки: от структуры HTML-документа до публикации готового сайта в интернете.<br>
+            Курс состоит из 6 теоретических лекций и 8 практических лабораторных работ для закрепления навыков.</p>
+        </div>
+
+        <div class="footer">
+            <p>Курс лекций по дисциплине «Обучение пользователей информационных систем» | Веб-разработка на HTML, CSS и JavaScript</p>
+        </div>
+    </div>
+
+    <script>
+        const tabBtns = document.querySelectorAll('.tab-btn:not(.test-btn)');
+        const sections = {
+            lectures: document.getElementById('lectures'),
+            practicals: document.getElementById('practicals')
+        };
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabName = btn.getAttribute('data-tab');
+                tabBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                Object.values(sections).forEach(section => section.classList.remove('active'));
+                sections[tabName].classList.add('active');
+            });
+        });
+
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 60;
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.width = (Math.random() * 6 + 2) + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (Math.random() * 12 + 8) + 's';
+                particle.style.animationDelay = (Math.random() * 15) + 's';
+                const colors = ['rgba(32,178,170,0.4)', 'rgba(72,201,176,0.3)', 'rgba(46,204,113,0.3)', 'rgba(93,173,226,0.3)'];
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        const cards = document.querySelectorAll('.lecture-card');
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                card.style.setProperty('--mouse-x', (e.clientX - rect.left) + 'px');
+                card.style.setProperty('--mouse-y', (e.clientY - rect.top) + 'px');
+            });
+            card.addEventListener('mousedown', () => {
+                card.style.transform = 'translateY(-2px) scale(0.98)';
+                setTimeout(() => { card.style.transform = ''; }, 150);
+            });
+        });
+
+        const style = document.createElement('style');
+        style.textContent = `.lecture-card{position:relative;overflow:hidden}.lecture-card::after{content:'';position:absolute;top:var(--mouse-y,50%);left:var(--mouse-x,50%);width:100px;height:100px;background:radial-gradient(circle,rgba(32,178,170,0.3) 0%,transparent 70%);transform:translate(-50%,-50%);opacity:0;transition:opacity 0.3s;pointer-events:none;border-radius:50%}.lecture-card:hover::after{opacity:1}`;
+        document.head.appendChild(style);
+
+        createParticles();
+
+        const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) { entry.target.style.opacity = '1'; entry.target.style.transform = 'translateY(0)'; } });
+        }, observerOptions);
+        document.querySelectorAll('.lecture-card').forEach(card => {
+            card.style.opacity = '0'; card.style.transform = 'translateY(30px)'; card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+
+        const infoSection = document.querySelector('.info-section');
+        if (infoSection) {
+            infoSection.style.opacity = '0';
+            infoSection.style.transform = 'translateY(30px)';
+            infoSection.style.transition = 'opacity 0.6s ease 0.2s, transform 0.6s ease 0.2s';
+            setTimeout(() => {
+                infoSection.style.opacity = '1';
+                infoSection.style.transform = 'translateY(0)';
+            }, 200);
+        }
+    </script>
+</body>
+</html>
